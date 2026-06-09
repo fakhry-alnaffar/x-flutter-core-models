@@ -1,88 +1,89 @@
 import 'package:onix_flutter_core_models/src/domain/failure/failure.dart';
+import 'package:onix_flutter_core_models/src/domain/failure/networking/server_failure.dart';
 
-class ApiFailure implements Failure {
+/// Abstract base for all server and network failures.
+///
+/// Do not instantiate [ApiFailure] directly — use one of the typed subtypes:
+/// [ConnectionFailure], [ApiUnauthorizedFailure], [ApiTooManyRequestsFailure],
+/// [ApiExceptionFailure], [ApiResponseFailure], [ApiUndefinedFailure], or
+/// [ApiUnknownFailure].
+///
+/// Equality is value-based: two instances of the same concrete subtype with
+/// identical [failure], [statusCode], and [message] are considered equal.
+abstract class ApiFailure implements Failure {
+  /// The broad category of this failure.
   final ServerFailure failure;
+
+  /// HTTP status code returned by the server, if available.
   final int? statusCode;
 
+  /// Human-readable description of the error.
   final String message;
 
-  ApiFailure(
+  const ApiFailure(
     this.failure, {
     this.message = '',
     this.statusCode,
   });
 
   @override
-  String toString() {
-    return 'ApiFailure{$failure, message: $message, statusCode: $statusCode}';
-  }
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other.runtimeType == runtimeType &&
+          other is ApiFailure &&
+          other.failure == failure &&
+          other.statusCode == statusCode &&
+          other.message == message);
+
+  @override
+  int get hashCode => Object.hash(runtimeType, failure, statusCode, message);
+
+  /// Format: `ClassName{failure: …, statusCode: …, message: …}`
+  @override
+  String toString() =>
+      '$runtimeType{failure: $failure, statusCode: $statusCode, message: $message}';
 }
 
+/// The server returned an HTTP error response with a specific [statusCode].
+///
+/// Use for any 4xx / 5xx response that does not have a more specific subtype.
+class ApiResponseFailure extends ApiFailure {
+  const ApiResponseFailure({
+    required int statusCode,
+    String message = '',
+  }) : super(ServerFailure.response, statusCode: statusCode, message: message);
+}
+
+/// The server returned an unrecognised or unexpected error payload.
 class ApiUndefinedFailure extends ApiFailure {
-  ApiUndefinedFailure({
+  const ApiUndefinedFailure({
     int? statusCode,
     required String message,
   }) : super(ServerFailure.unknown, message: message, statusCode: statusCode);
-
-  @override
-  String toString() {
-    return 'ApiUndefinedFailure{failure: $failure, statusCode: $statusCode, message: $message}';
-  }
 }
 
+/// The device has no network connectivity.
 class ConnectionFailure extends ApiFailure {
-  ConnectionFailure() : super(ServerFailure.noNetwork, message: '');
-
-  @override
-  String toString() {
-    return 'ConnectionFailure{failure: $failure}';
-  }
+  const ConnectionFailure() : super(ServerFailure.noNetwork);
 }
 
+/// An unexpected exception was thrown while executing the request.
 class ApiExceptionFailure extends ApiFailure {
-  ApiExceptionFailure({
-    required String message,
-  }) : super(ServerFailure.exception, message: message);
-
-  @override
-  String toString() {
-    return 'ApiExceptionFailure{failure: $failure, message: $message}';
-  }
+  const ApiExceptionFailure({required String message})
+      : super(ServerFailure.exception, message: message);
 }
 
+/// The server rejected the request due to missing or invalid credentials (401).
 class ApiUnauthorizedFailure extends ApiFailure {
-  ApiUnauthorizedFailure() : super(ServerFailure.unAuthorized, message: '');
-
-  @override
-  String toString() {
-    return 'ApiUnauthorizedFailure{failure: $failure}';
-  }
+  const ApiUnauthorizedFailure() : super(ServerFailure.unauthorized);
 }
 
+/// The client has been rate-limited by the server (429).
 class ApiTooManyRequestsFailure extends ApiFailure {
-  ApiTooManyRequestsFailure()
-      : super(ServerFailure.tooManyRequests, message: '');
-
-  @override
-  String toString() {
-    return 'ApiTooManyRequestsFailure{failure: $failure}';
-  }
+  const ApiTooManyRequestsFailure() : super(ServerFailure.tooManyRequests);
 }
 
+/// The failure reason could not be determined.
 class ApiUnknownFailure extends ApiFailure {
-  ApiUnknownFailure() : super(ServerFailure.unknown, message: '');
-
-  @override
-  String toString() {
-    return 'ApiUnknownFailure{failure: $failure}';
-  }
-}
-
-enum ServerFailure {
-  noNetwork,
-  exception,
-  unAuthorized,
-  tooManyRequests,
-  response,
-  unknown,
+  const ApiUnknownFailure() : super(ServerFailure.unknown);
 }

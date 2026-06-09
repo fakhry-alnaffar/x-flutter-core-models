@@ -1,175 +1,278 @@
 import 'package:onix_flutter_core_models/onix_flutter_core_models.dart';
-
-// ---------------------------------------------------------------------------
-// Failure hierarchy
-// ---------------------------------------------------------------------------
-
-void testCanceledRequestFailure() {
-  const f1 = CanceledRequestFailure();
-  const f2 = CanceledRequestFailure();
-  assert(identical(f1, f2), 'const constructor must produce identical instances');
-  // Static type confirms it implements Failure — verified at compile time.
-  Failure _ = f1;
-}
-
-void testApiFailureBase() {
-  final f = ApiFailure(ServerFailure.unknown, message: 'oops', statusCode: 500);
-  assert(f.failure == ServerFailure.unknown);
-  assert(f.message == 'oops');
-  assert(f.statusCode == 500);
-  assert(f.toString().contains('oops'));
-  assert(f.toString().contains('500'));
-}
-
-void testApiFailureDefaults() {
-  final f = ApiFailure(ServerFailure.response);
-  assert(f.message == '');
-  assert(f.statusCode == null);
-}
-
-void testApiUndefinedFailure() {
-  final f = ApiUndefinedFailure(message: 'undefined', statusCode: 422);
-  assert(f.failure == ServerFailure.unknown);
-  assert(f.message == 'undefined');
-  assert(f.statusCode == 422);
-  assert(f.toString().contains('ApiUndefinedFailure'));
-  assert(f.toString().contains('422'));
-}
-
-void testConnectionFailure() {
-  final f = ConnectionFailure();
-  assert(f.failure == ServerFailure.noNetwork);
-  assert(f.message == '');
-  assert(f.toString().contains('ConnectionFailure'));
-}
-
-void testApiExceptionFailure() {
-  final f = ApiExceptionFailure(message: 'timeout');
-  assert(f.failure == ServerFailure.exception);
-  assert(f.message == 'timeout');
-  assert(f.toString().contains('timeout'));
-}
-
-void testApiUnauthorizedFailure() {
-  final f = ApiUnauthorizedFailure();
-  assert(f.failure == ServerFailure.unAuthorized);
-  assert(f.toString().contains('ApiUnauthorizedFailure'));
-}
-
-void testApiTooManyRequestsFailure() {
-  final f = ApiTooManyRequestsFailure();
-  assert(f.failure == ServerFailure.tooManyRequests);
-  assert(f.toString().contains('ApiTooManyRequestsFailure'));
-}
-
-void testApiUnknownFailure() {
-  final f = ApiUnknownFailure();
-  assert(f.failure == ServerFailure.unknown);
-  assert(f.toString().contains('ApiUnknownFailure'));
-}
-
-// ---------------------------------------------------------------------------
-// ServerFailure enum
-// ---------------------------------------------------------------------------
-
-void testServerFailureValues() {
-  assert(ServerFailure.values.length == 6, 'ServerFailure must have exactly 6 values');
-  assert(ServerFailure.values.contains(ServerFailure.noNetwork));
-  assert(ServerFailure.values.contains(ServerFailure.exception));
-  assert(ServerFailure.values.contains(ServerFailure.unAuthorized));
-  assert(ServerFailure.values.contains(ServerFailure.tooManyRequests));
-  assert(ServerFailure.values.contains(ServerFailure.response));
-  assert(ServerFailure.values.contains(ServerFailure.unknown));
-}
-
-void testServerFailureExhaustiveSwitch() {
-  // If any ServerFailure value were missing from this switch the compiler
-  // would produce a non-exhaustive error — reaching here means it's complete.
-  for (final v in ServerFailure.values) {
-    final label = switch (v) {
-      ServerFailure.noNetwork       => 'noNetwork',
-      ServerFailure.exception       => 'exception',
-      ServerFailure.unAuthorized    => 'unAuthorized',
-      ServerFailure.tooManyRequests => 'tooManyRequests',
-      ServerFailure.response        => 'response',
-      ServerFailure.unknown         => 'unknown',
-    };
-    assert(label.isNotEmpty);
-  }
-}
-
-// ---------------------------------------------------------------------------
-// BaseProgressState sealed hierarchy
-// ---------------------------------------------------------------------------
-
-void testDefaultProgressStateTrue() {
-  const s = DefaultProgressState(showProgress: true);
-  assert(s.showProgress == true);
-  // Assignable to sealed base — verified at compile time.
-  BaseProgressState _ = s;
-}
-
-void testDefaultProgressStateFalse() {
-  const s = DefaultProgressState(showProgress: false);
-  assert(s.showProgress == false);
-}
-
-void testDefaultProgressStateConstIdentity() {
-  const a = DefaultProgressState(showProgress: true);
-  const b = DefaultProgressState(showProgress: true);
-  assert(identical(a, b), 'const instances with same args must be identical');
-}
-
-void testSealedExhaustiveSwitch() {
-  // Exhaustive switch over sealed BaseProgressState — compile error if a
-  // subtype is missing.
-  final BaseProgressState state = DefaultProgressState(showProgress: false);
-  final result = switch (state) {
-    DefaultProgressState s => s.showProgress,
-  };
-  assert(result == false);
-}
-
-// ---------------------------------------------------------------------------
-// Runner
-// ---------------------------------------------------------------------------
+import 'package:test/test.dart';
 
 void main() {
-  final tests = <String, void Function()>{
-    'CanceledRequestFailure: const identity + implements Failure':  testCanceledRequestFailure,
-    'ApiFailure: fields and toString':                              testApiFailureBase,
-    'ApiFailure: default values':                                   testApiFailureDefaults,
-    'ApiUndefinedFailure: fields, type, toString':                  testApiUndefinedFailure,
-    'ConnectionFailure: fields and toString':                       testConnectionFailure,
-    'ApiExceptionFailure: fields and toString':                     testApiExceptionFailure,
-    'ApiUnauthorizedFailure: fields and toString':                  testApiUnauthorizedFailure,
-    'ApiTooManyRequestsFailure: fields and toString':               testApiTooManyRequestsFailure,
-    'ApiUnknownFailure: fields and toString':                       testApiUnknownFailure,
-    'ServerFailure: all 6 values present':                          testServerFailureValues,
-    'ServerFailure: exhaustive switch compiles and runs':           testServerFailureExhaustiveSwitch,
-    'DefaultProgressState: showProgress true':                      testDefaultProgressStateTrue,
-    'DefaultProgressState: showProgress false':                     testDefaultProgressStateFalse,
-    'DefaultProgressState: const identity':                         testDefaultProgressStateConstIdentity,
-    'BaseProgressState: sealed exhaustive switch':                  testSealedExhaustiveSwitch,
-  };
+  // -------------------------------------------------------------------------
+  // CanceledRequestFailure
+  // -------------------------------------------------------------------------
+  group('CanceledRequestFailure', () {
+    test('implements Failure', () {
+      expect(const CanceledRequestFailure(), isA<Failure>());
+    });
 
-  var passed = 0;
-  var failed = 0;
+    test('const identity', () {
+      const a = CanceledRequestFailure();
+      const b = CanceledRequestFailure();
+      expect(identical(a, b), isTrue);
+    });
 
-  for (final entry in tests.entries) {
-    try {
-      entry.value();
-      print('[PASS] ${entry.key}');
-      passed++;
-    } catch (e) {
-      print('[FAIL] ${entry.key}');
-      print('       $e');
-      failed++;
-    }
-  }
+    test('value equality', () {
+      expect(const CanceledRequestFailure(), equals(const CanceledRequestFailure()));
+    });
 
-  print('');
-  print('Results: $passed passed, $failed failed out of ${tests.length} tests');
+    test('hashCode is stable', () {
+      expect(
+        const CanceledRequestFailure().hashCode,
+        equals(const CanceledRequestFailure().hashCode),
+      );
+    });
 
-  if (failed > 0) throw Exception('$failed test(s) failed');
+    test('toString', () {
+      expect(const CanceledRequestFailure().toString(), 'CanceledRequestFailure{}');
+    });
+  });
+
+  // -------------------------------------------------------------------------
+  // ApiFailure — shared base behaviour, tested through concrete subtypes
+  // -------------------------------------------------------------------------
+  group('ApiFailure (base behaviour)', () {
+    test('same subtype + same fields are equal', () {
+      const a = ApiUndefinedFailure(message: 'err', statusCode: 500);
+      const b = ApiUndefinedFailure(message: 'err', statusCode: 500);
+      expect(a, equals(b));
+    });
+
+    test('same subtype + different message are not equal', () {
+      const a = ApiUndefinedFailure(message: 'a');
+      const b = ApiUndefinedFailure(message: 'b');
+      expect(a, isNot(equals(b)));
+    });
+
+    test('different subtypes are not equal even with same ServerFailure value', () {
+      // Both map to ServerFailure.unknown
+      const a = ApiUndefinedFailure(message: '');
+      const b = ApiUnknownFailure();
+      expect(a, isNot(equals(b)));
+    });
+
+    test('hashCode is consistent with equality', () {
+      const a = ApiUndefinedFailure(message: 'err', statusCode: 500);
+      const b = ApiUndefinedFailure(message: 'err', statusCode: 500);
+      expect(a.hashCode, equals(b.hashCode));
+    });
+
+    test('toString includes runtimeType, failure, statusCode, message', () {
+      const f = ApiUndefinedFailure(message: 'oops', statusCode: 422);
+      final s = f.toString();
+      expect(s, contains('ApiUndefinedFailure'));
+      expect(s, contains('422'));
+      expect(s, contains('oops'));
+    });
+  });
+
+  // -------------------------------------------------------------------------
+  // Concrete ApiFailure subtypes
+  // -------------------------------------------------------------------------
+  group('ApiResponseFailure', () {
+    test('maps to ServerFailure.response', () {
+      const f = ApiResponseFailure(statusCode: 404, message: 'not found');
+      expect(f.failure, ServerFailure.response);
+      expect(f.statusCode, 404);
+      expect(f.message, 'not found');
+    });
+
+    test('message defaults to empty', () {
+      expect(const ApiResponseFailure(statusCode: 500).message, '');
+    });
+
+    test('value equality', () {
+      const a = ApiResponseFailure(statusCode: 404, message: 'not found');
+      const b = ApiResponseFailure(statusCode: 404, message: 'not found');
+      expect(a, equals(b));
+    });
+
+    test('toString contains class name and statusCode', () {
+      final s = const ApiResponseFailure(statusCode: 503).toString();
+      expect(s, contains('ApiResponseFailure'));
+      expect(s, contains('503'));
+    });
+  });
+
+  group('ApiUndefinedFailure', () {
+    test('maps to ServerFailure.unknown with all fields', () {
+      const f = ApiUndefinedFailure(message: 'undef', statusCode: 422);
+      expect(f.failure, ServerFailure.unknown);
+      expect(f.message, 'undef');
+      expect(f.statusCode, 422);
+    });
+  });
+
+  group('ConnectionFailure', () {
+    test('maps to ServerFailure.noNetwork', () {
+      expect(const ConnectionFailure().failure, ServerFailure.noNetwork);
+      expect(const ConnectionFailure().message, '');
+    });
+
+    test('value equality', () {
+      expect(const ConnectionFailure(), equals(const ConnectionFailure()));
+    });
+
+    test('toString contains class name', () {
+      expect(const ConnectionFailure().toString(), contains('ConnectionFailure'));
+    });
+  });
+
+  group('ApiExceptionFailure', () {
+    test('maps to ServerFailure.exception', () {
+      const f = ApiExceptionFailure(message: 'timeout');
+      expect(f.failure, ServerFailure.exception);
+      expect(f.message, 'timeout');
+    });
+  });
+
+  group('ApiUnauthorizedFailure', () {
+    test('maps to ServerFailure.unauthorized', () {
+      expect(const ApiUnauthorizedFailure().failure, ServerFailure.unauthorized);
+    });
+
+    test('value equality', () {
+      expect(const ApiUnauthorizedFailure(), equals(const ApiUnauthorizedFailure()));
+    });
+  });
+
+  group('ApiTooManyRequestsFailure', () {
+    test('maps to ServerFailure.tooManyRequests', () {
+      expect(const ApiTooManyRequestsFailure().failure, ServerFailure.tooManyRequests);
+    });
+
+    test('value equality', () {
+      expect(const ApiTooManyRequestsFailure(), equals(const ApiTooManyRequestsFailure()));
+    });
+  });
+
+  group('ApiUnknownFailure', () {
+    test('maps to ServerFailure.unknown', () {
+      expect(const ApiUnknownFailure().failure, ServerFailure.unknown);
+    });
+
+    test('value equality', () {
+      expect(const ApiUnknownFailure(), equals(const ApiUnknownFailure()));
+    });
+  });
+
+  // -------------------------------------------------------------------------
+  // ServerFailure enhanced enum
+  // -------------------------------------------------------------------------
+  group('ServerFailure', () {
+    test('has exactly 6 values', () {
+      expect(ServerFailure.values.length, 6);
+    });
+
+    test('all values are present', () {
+      expect(ServerFailure.values, containsAll([
+        ServerFailure.noNetwork,
+        ServerFailure.exception,
+        ServerFailure.unauthorized,
+        ServerFailure.tooManyRequests,
+        ServerFailure.response,
+        ServerFailure.unknown,
+      ]));
+    });
+
+    test('each value has a non-empty label', () {
+      for (final v in ServerFailure.values) {
+        expect(v.label, isNotEmpty, reason: '$v.label must not be empty');
+      }
+    });
+
+    test('exhaustive switch covers all values', () {
+      for (final v in ServerFailure.values) {
+        final label = switch (v) {
+          ServerFailure.noNetwork       => 'noNetwork',
+          ServerFailure.exception       => 'exception',
+          ServerFailure.unauthorized    => 'unauthorized',
+          ServerFailure.tooManyRequests => 'tooManyRequests',
+          ServerFailure.response        => 'response',
+          ServerFailure.unknown         => 'unknown',
+        };
+        expect(label, isNotEmpty);
+      }
+    });
+  });
+
+  // -------------------------------------------------------------------------
+  // DefaultProgressState
+  // -------------------------------------------------------------------------
+  group('DefaultProgressState', () {
+    test('implements BaseProgressState', () {
+      expect(const DefaultProgressState(showProgress: true), isA<BaseProgressState>());
+    });
+
+    test('showProgress: true', () {
+      expect(const DefaultProgressState(showProgress: true).showProgress, isTrue);
+    });
+
+    test('showProgress: false', () {
+      expect(const DefaultProgressState(showProgress: false).showProgress, isFalse);
+    });
+
+    test('const identity for same args', () {
+      const a = DefaultProgressState(showProgress: true);
+      const b = DefaultProgressState(showProgress: true);
+      expect(identical(a, b), isTrue);
+    });
+
+    test('value equality', () {
+      expect(
+        DefaultProgressState(showProgress: true),
+        equals(DefaultProgressState(showProgress: true)),
+      );
+    });
+
+    test('inequality on different showProgress', () {
+      expect(
+        DefaultProgressState(showProgress: true),
+        isNot(equals(DefaultProgressState(showProgress: false))),
+      );
+    });
+
+    test('hashCode consistent with equality', () {
+      expect(
+        DefaultProgressState(showProgress: true).hashCode,
+        equals(DefaultProgressState(showProgress: true).hashCode),
+      );
+    });
+
+    test('toString', () {
+      expect(
+        const DefaultProgressState(showProgress: true).toString(),
+        'DefaultProgressState{showProgress: true}',
+      );
+    });
+
+    test('copyWith changes showProgress', () {
+      const original = DefaultProgressState(showProgress: true);
+      final copy = original.copyWith(showProgress: false);
+      expect(copy.showProgress, isFalse);
+    });
+
+    test('copyWith with no args returns equivalent instance', () {
+      const original = DefaultProgressState(showProgress: true);
+      final copy = original.copyWith();
+      expect(copy, equals(original));
+    });
+  });
+
+  // -------------------------------------------------------------------------
+  // BaseProgressState sealed exhaustive switch
+  // -------------------------------------------------------------------------
+  group('BaseProgressState', () {
+    test('sealed exhaustive switch compiles and runs', () {
+      final BaseProgressState state = DefaultProgressState(showProgress: false);
+      final result = switch (state) {
+        DefaultProgressState s => s.showProgress,
+      };
+      expect(result, isFalse);
+    });
+  });
 }
