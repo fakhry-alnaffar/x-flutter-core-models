@@ -4,6 +4,7 @@ Flutter core models — failure types, server error hierarchy, and progress stat
 
 ## Features
 
+- **`DataResponse`** — standard response contract for repositories and data sources.
 - **`Failure`** — abstract root type for all domain failures.
 - **`ApiFailure` hierarchy** — typed server failures covering no-network, unauthorized, too-many-requests, exceptions, and unknown states.
 - **`CanceledRequestFailure`** — const-constructible failure for canceled in-flight requests.
@@ -18,24 +19,29 @@ dependencies:
 
 ## Usage
 
-### Failure types
+### Response handling
 
 ```dart
 import 'package:x_flutter_core_models/x_flutter_core_models.dart';
 
-Future<Result<User>> getUser(String id) async {
+Future<DataResponse<User>> getUser(String id) async {
   try {
     final data = await api.fetchUser(id);
-    return Result.success(data);
+    return DataResponse.success(data);
   } on SocketException {
-    return Result.failure(ConnectionFailure());
+    return DataResponse.failure(ConnectionFailure());
   } on UnauthorizedException {
-    return Result.failure(ApiUnauthorizedFailure());
+    return DataResponse.failure(ApiUnauthorizedFailure());
   } on ApiException catch (e) {
-    return Result.failure(ApiExceptionFailure(message: e.message));
+    return DataResponse.failure(ApiExceptionFailure(message: e.message));
   }
 }
 ```
+
+### Failure types
+
+The package provides a rich hierarchy of failure types that can be used with `DataResponse`.
+
 
 ### Progress state
 
@@ -57,6 +63,7 @@ const idle    = DefaultProgressState(showProgress: false);
 
 | Class | Description |
 |---|---|
+| `DataResponse` | Standard response model (Success/Failure) for repositories. |
 | `Failure` | Abstract root — implement or extend to create domain-specific failures. |
 | `ApiFailure` | Base for all server/network failures; carries `ServerFailure` enum, optional status code, and message. |
 | `ApiUndefinedFailure` | Server returned an unrecognized error. |

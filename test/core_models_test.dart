@@ -277,4 +277,40 @@ void main() {
       expect(result, isFalse);
     });
   });
+
+  // -------------------------------------------------------------------------
+  // DataResponse
+  // -------------------------------------------------------------------------
+  group('DataResponse', () {
+    test('DataResponse.success contains data', () {
+      const resp = DataResponse.success('test');
+      expect(resp, isA<DataResponseSuccess<String>>());
+      expect((resp as DataResponseSuccess).data, 'test');
+    });
+
+    test('DataResponse.failure contains failure', () {
+      const failure = ConnectionFailure();
+      const resp = DataResponse<String>.failure(failure);
+      expect(resp, isA<DataResponseFailure<String>>());
+      expect((resp as DataResponseFailure).failure, failure);
+    });
+
+    test('DataResponseSuccess equality', () {
+      expect(const DataResponse.success(1), equals(const DataResponse.success(1)));
+      expect(const DataResponse.success(1), isNot(equals(const DataResponse.success(2))));
+    });
+
+    test('DataResponseFailure equality', () {
+      const f1 = ConnectionFailure();
+      const f2 = ApiUnauthorizedFailure();
+      expect(DataResponse<int>.failure(f1), equals(DataResponse<int>.failure(f1)));
+      expect(DataResponse<int>.failure(f1), isNot(equals(DataResponse<int>.failure(f2))));
+    });
+
+    test('Result alias works (deprecated)', () {
+      // ignore: deprecated_member_use_from_same_package
+      const Result<int> res = DataResponse.success(1);
+      expect(res, isA<DataResponseSuccess<int>>());
+    });
+  });
 }
