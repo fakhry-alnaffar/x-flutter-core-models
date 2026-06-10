@@ -59,7 +59,7 @@ class ApiUndefinedFailure extends ApiFailure {
   const ApiUndefinedFailure({
     int? statusCode,
     required String message,
-  }) : super(ServerFailure.unknown, message: message, statusCode: statusCode);
+  }) : super(ServerFailure.undefined, message: message, statusCode: statusCode);
 }
 
 /// The device has no network connectivity.

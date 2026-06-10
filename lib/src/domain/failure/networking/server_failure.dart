@@ -18,6 +18,9 @@ enum ServerFailure {
   /// The server returned an HTTP error response (4xx / 5xx).
   response('Server response error'),
 
+  /// The server returned an unrecognised or unexpected error payload.
+  undefined('Undefined error'),
+
   /// The failure reason could not be determined.
   unknown('Unknown error');
 

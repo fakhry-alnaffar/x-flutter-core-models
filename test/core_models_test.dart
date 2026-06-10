@@ -99,9 +99,9 @@ void main() {
   });
 
   group('ApiUndefinedFailure', () {
-    test('maps to ServerFailure.unknown with all fields', () {
+    test('maps to ServerFailure.undefined with all fields', () {
       const f = ApiUndefinedFailure(message: 'undef', statusCode: 422);
-      expect(f.failure, ServerFailure.unknown);
+      expect(f.failure, ServerFailure.undefined);
       expect(f.message, 'undef');
       expect(f.statusCode, 422);
     });
@@ -164,8 +164,8 @@ void main() {
   // ServerFailure enhanced enum
   // -------------------------------------------------------------------------
   group('ServerFailure', () {
-    test('has exactly 6 values', () {
-      expect(ServerFailure.values.length, 6);
+    test('has exactly 7 values', () {
+      expect(ServerFailure.values.length, 7);
     });
 
     test('all values are present', () {
@@ -175,6 +175,7 @@ void main() {
         ServerFailure.unauthorized,
         ServerFailure.tooManyRequests,
         ServerFailure.response,
+        ServerFailure.undefined,
         ServerFailure.unknown,
       ]));
     });
@@ -193,6 +194,7 @@ void main() {
           ServerFailure.unauthorized    => 'unauthorized',
           ServerFailure.tooManyRequests => 'tooManyRequests',
           ServerFailure.response        => 'response',
+          ServerFailure.undefined       => 'undefined',
           ServerFailure.unknown         => 'unknown',
         };
         expect(label, isNotEmpty);

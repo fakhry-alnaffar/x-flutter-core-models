@@ -24,7 +24,9 @@ class DefaultProgressState extends BaseProgressState {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      (other is DefaultProgressState && other.showProgress == showProgress);
+      (other.runtimeType == runtimeType &&
+          other is DefaultProgressState &&
+          other.showProgress == showProgress);
 
   @override
   int get hashCode => showProgress.hashCode;
