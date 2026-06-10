@@ -1,3 +1,10 @@
+## 0.1.0
+
+- Added `ServerFailure.undefined` — distinct enum value for unrecognised/unexpected error payloads, so `ApiUndefinedFailure` and `ApiUnknownFailure` no longer share `ServerFailure.unknown` (breaking: exhaustive switches on `ServerFailure` must add the new arm)
+- Fixed `CanceledRequestFailure.==` / `hashCode` contract violation — `operator==` now uses `runtimeType` guard, consistent with `ApiFailure` and `DefaultProgressState`
+- Fixed `DefaultProgressState.==` — added `runtimeType` guard to prevent subclass instances from comparing equal to base-type instances
+- Lowered SDK constraint from `^3.12.0` to `^3.0.0` — no Dart 3.12-specific features are used
+
 ## 0.0.3
 
 - Raised Dart SDK lower bound to `>=3.12.0` — package language version now resolves to 3.12
