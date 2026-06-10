@@ -1,6 +1,6 @@
 name: onix_flutter_core_models
 description: Onix Flutter core models — failure types, server error hierarchy, and progress state for domain layers.
-version: 0.0.3
+version: 0.1.0
 repository: https://github.com/fakhry-alnaffar/onix-flutter-core-models
 
 topics:
