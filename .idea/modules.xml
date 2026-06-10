@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/onix_flutter_core_models.iml" filepath="$PROJECT_DIR$/onix_flutter_core_models.iml" />
+      <module fileurl="file://$PROJECT_DIR$/x_flutter_core_models.iml" filepath="$PROJECT_DIR$/x_flutter_core_models.iml" />
     </modules>
   </component>
 </project>
