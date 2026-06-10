@@ -9,7 +9,7 @@ class CanceledRequestFailure implements Failure {
   const CanceledRequestFailure();
 
   @override
-  bool operator ==(Object other) => other is CanceledRequestFailure;
+  bool operator ==(Object other) => other.runtimeType == runtimeType;
 
   @override
   int get hashCode => runtimeType.hashCode;
