@@ -1,3 +1,7 @@
+## 0.1.3
+
+- Fix stale "Onix" branding in README description
+
 ## 0.1.2
 
 - Updated repository URL to `https://github.com/fakhry-alnaffar/x-flutter-core-models`

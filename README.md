@@ -1,6 +1,6 @@
 # x_flutter_core_models
 
-Core domain models for Onix Flutter projects — failure types, server error hierarchy, and progress state primitives.
+Flutter core models — failure types, server error hierarchy, and progress state for domain layers.
 
 ## Features
 
@@ -13,7 +13,7 @@ Core domain models for Onix Flutter projects — failure types, server error hie
 
 ```yaml
 dependencies:
-  x_flutter_core_models: ^0.1.2
+  x_flutter_core_models: ^0.1.3
 ```
 
 ## Usage
