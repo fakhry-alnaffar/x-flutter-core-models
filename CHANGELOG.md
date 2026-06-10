@@ -1,4 +1,4 @@
-## 0.1.4
+## 1.0.0
 
 - Added dartdoc comments to all public constructors and the library directive
 - Added `example/example.dart` demonstrating failure handling and progress state
