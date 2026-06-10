@@ -1,4 +1,4 @@
-import 'package:onix_flutter_core_models/onix_flutter_core_models.dart';
+import 'package:x_flutter_core_models/x_flutter_core_models.dart';
 import 'package:test/test.dart';
 
 void main() {

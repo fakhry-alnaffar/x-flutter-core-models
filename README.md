@@ -1,4 +1,4 @@
-# onix_flutter_core_models
+# x_flutter_core_models
 
 Core domain models for Onix Flutter projects — failure types, server error hierarchy, and progress state primitives.
 
@@ -13,7 +13,7 @@ Core domain models for Onix Flutter projects — failure types, server error hie
 
 ```yaml
 dependencies:
-  onix_flutter_core_models: ^0.0.2
+  x_flutter_core_models: ^0.0.2
 ```
 
 ## Usage
@@ -21,7 +21,7 @@ dependencies:
 ### Failure types
 
 ```dart
-import 'package:onix_flutter_core_models/onix_flutter_core_models.dart';
+import 'package:x_flutter_core_models/x_flutter_core_models.dart';
 
 Future<Result<User>> getUser(String id) async {
   try {
@@ -40,7 +40,7 @@ Future<Result<User>> getUser(String id) async {
 ### Progress state
 
 ```dart
-import 'package:onix_flutter_core_models/onix_flutter_core_models.dart';
+import 'package:x_flutter_core_models/x_flutter_core_models.dart';
 
 // Extend BaseProgressState to carry custom data alongside show/hide signals.
 class UploadProgressState extends BaseProgressState {

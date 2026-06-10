@@ -1,5 +1,5 @@
-import 'package:onix_flutter_core_models/src/domain/failure/failure.dart';
-import 'package:onix_flutter_core_models/src/domain/failure/networking/server_failure.dart';
+import 'package:x_flutter_core_models/src/domain/failure/failure.dart';
+import 'package:x_flutter_core_models/src/domain/failure/networking/server_failure.dart';
 
 /// Abstract base for all server and network failures.
 ///

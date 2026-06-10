@@ -1,3 +1,7 @@
+## 0.1.1
+
+- Renamed package from `onix_flutter_core_models` to `x_flutter_core_models`
+
 ## 0.1.0
 
 - Added `ServerFailure.undefined` — distinct enum value for unrecognised/unexpected error payloads, so `ApiUndefinedFailure` and `ApiUnknownFailure` no longer share `ServerFailure.unknown` (breaking: exhaustive switches on `ServerFailure` must add the new arm)
