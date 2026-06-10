@@ -1,3 +1,8 @@
+## 0.1.4
+
+- Added dartdoc comments to all public constructors and the library directive
+- Added `example/example.dart` demonstrating failure handling and progress state
+
 ## 0.1.3
 
 - Fix stale "Onix" branding in README description

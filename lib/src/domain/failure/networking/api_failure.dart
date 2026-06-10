@@ -20,6 +20,8 @@ abstract class ApiFailure implements Failure {
   /// Human-readable description of the error.
   final String message;
 
+  /// Creates an [ApiFailure] with the given [failure] category, optional
+  /// [message], and optional HTTP [statusCode].
   const ApiFailure(
     this.failure, {
     this.message = '',
@@ -48,6 +50,8 @@ abstract class ApiFailure implements Failure {
 ///
 /// Use for any 4xx / 5xx response that does not have a more specific subtype.
 class ApiResponseFailure extends ApiFailure {
+  /// Creates an [ApiResponseFailure] with the required HTTP [statusCode] and
+  /// an optional [message].
   const ApiResponseFailure({
     required int statusCode,
     String message = '',
@@ -69,6 +73,7 @@ class ConnectionFailure extends ApiFailure {
 
 /// An unexpected exception was thrown while executing the request.
 class ApiExceptionFailure extends ApiFailure {
+  /// Creates an [ApiExceptionFailure] with a [message] describing the exception.
   const ApiExceptionFailure({required String message})
       : super(ServerFailure.exception, message: message);
 }
@@ -80,6 +85,7 @@ class ApiUnauthorizedFailure extends ApiFailure {
 
 /// The client has been rate-limited by the server (429).
 class ApiTooManyRequestsFailure extends ApiFailure {
+  /// Creates an [ApiTooManyRequestsFailure] for HTTP 429 rate-limit responses.
   const ApiTooManyRequestsFailure() : super(ServerFailure.tooManyRequests);
 }
 

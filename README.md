@@ -13,7 +13,7 @@ Flutter core models — failure types, server error hierarchy, and progress stat
 
 ```yaml
 dependencies:
-  x_flutter_core_models: ^0.1.3
+  x_flutter_core_models: ^0.1.4
 ```
 
 ## Usage
