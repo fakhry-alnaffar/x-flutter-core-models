@@ -13,7 +13,7 @@ Core domain models for Onix Flutter projects — failure types, server error hie
 
 ```yaml
 dependencies:
-  x_flutter_core_models: ^0.0.2
+  x_flutter_core_models: ^0.1.1
 ```
 
 ## Usage
