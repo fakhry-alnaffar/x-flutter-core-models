@@ -1,7 +1,7 @@
 name: x_flutter_core_models
 description: Flutter core models — failure types, server error hierarchy, and progress state for domain layers.
-version: 0.1.1
-repository: https://github.com/fakhry-alnaffar/onix-flutter-core-models
+version: 0.1.2
+repository: https://github.com/fakhry-alnaffar/x-flutter-core-models.git
 
 topics:
   - failure

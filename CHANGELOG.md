@@ -1,3 +1,8 @@
+## 0.1.2
+
+- Updated repository URL to `https://github.com/fakhry-alnaffar/x-flutter-core-models`
+- Updated README installation version
+
 ## 0.1.1
 
 - Renamed package from `onix_flutter_core_models` to `x_flutter_core_models`
