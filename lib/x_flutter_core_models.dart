@@ -17,3 +17,5 @@ export 'src/domain/failure/networking/server_failure.dart';
 export 'src/domain/failure/networking/api_failure.dart';
 export 'src/domain/failure/networking/canceled_request_failure.dart';
 export 'src/domain/progress_state/progress_state.dart';
+export 'src/domain/converter/mapper.dart';
+export 'src/domain/operation_status.dart';
